@@ -20,7 +20,12 @@ public class PedidoResponse {
     @JsonProperty("itens_pedido")
     private List<ItemPedidoResponse> itens;
 
-    public static PedidoResponse of(Pedido saved) {
-        return new PedidoResponse();
+    public static PedidoResponse of(Pedido pedido) {
+        var pedidoResponse = new PedidoResponse();
+        pedidoResponse.setId(pedido.getId());
+        pedidoResponse.setDataHora(pedido.getDataHora());
+        pedidoResponse.setStatus(pedido.getStatus());
+        pedidoResponse.setItens(null);
+        return pedidoResponse;
     }
 }
