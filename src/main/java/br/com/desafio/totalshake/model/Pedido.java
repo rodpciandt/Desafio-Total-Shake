@@ -1,7 +1,7 @@
 package br.com.desafio.totalshake.model;
 
 
-import br.com.desafio.totalshake.dto.PedidoRequest;
+import br.com.desafio.totalshake.dto.PedidoDTO;
 import br.com.desafio.totalshake.enums.Status;
 import lombok.Data;
 
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "PEDIDO")
+@Table(name = "PEDIDOS")
 @Data
 public class Pedido {
 
@@ -29,7 +29,11 @@ public class Pedido {
     @OneToMany(mappedBy = "pedido")
     private List<ItemPedido> itensPedido;
 
-    public static Pedido of(PedidoRequest request) {
-        return new Pedido();
+    public static Pedido of(PedidoDTO request) {
+        var pedido = new Pedido();
+
+        pedido.setStatus(request.getStatus());
+        pedido.setDataHora(request.getDataHora());
+        return pedido;
     }
 }
