@@ -12,9 +12,10 @@ import javax.validation.constraints.NotNull;
 public class ItemPedidoDTO {
 
 
-    @NotNull
-    private Long id;
+    @NotNull(message = "idPedido nao pode ser nulo")
+    private Long idPedido;
 
+    private Long idItemPedido;
     @NotEmpty(message = "Descricao nao pode estar vazia")
     private String descricao;
 
@@ -24,7 +25,7 @@ public class ItemPedidoDTO {
     public static ItemPedidoDTO of(ItemPedido itemPedido) {
         var dto = new ItemPedidoDTO();
 
-        dto.setId(itemPedido.getId());
+        dto.setIdItemPedido(itemPedido.getId());
         dto.setDescricao(itemPedido.getDescricao());
         dto.setQuantidade(itemPedido.getQuantidade());
 

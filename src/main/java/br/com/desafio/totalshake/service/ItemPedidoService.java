@@ -23,8 +23,8 @@ public class ItemPedidoService {
 
 
 
-    public ItemPedidoDTO adicionarItem(Long idPedido, ItemPedidoDTO dto) {
-        Pedido pedido = findPedidoById(idPedido);
+    public ItemPedidoDTO adicionarItem(ItemPedidoDTO dto) {
+        Pedido pedido = findPedidoById(dto.getIdPedido());
         var itemPedido = itemPedidoRepository.save(ItemPedido.of(dto, pedido));
 
         return ItemPedidoDTO.of(itemPedido);
@@ -38,25 +38,23 @@ public class ItemPedidoService {
     }
 
 
-    public ItemPedidoDTO atualizarItem(Long idPedido, Long idItemPedido, ItemPedidoDTO dto) {
-        findPedidoById(idPedido);
+    public ItemPedidoDTO atualizarItem(Long idItemPedido, ItemPedidoDTO dto) {
         var itemPedido = itemPedidoRepository.findById(idItemPedido).orElseThrow(ItemPedidoNotFoundException::new);
         var updatedItemPedido = ItemPedido.of(dto, itemPedido.getPedido());
-        updatedItemPedido.setId(itemPedido.getId());
 
+        updatedItemPedido.setId(itemPedido.getId());
         return ItemPedidoDTO.of(itemPedidoRepository.save(updatedItemPedido));
     }
 
     public void deleteItem(Long id) {
         itemPedidoRepository.delete( itemPedidoRepository.findById(id).orElseThrow(ItemPedidoNotFoundException::new) );
     }
+
     private Pedido findPedidoById(Long id) {
         return pedidoRepository.findById(id).orElseThrow(PedidoNotFoundException::new);
     }
 
-    public ItemPedidoDTO findItemPedidoById(Long idPedido, Long idItemPedido) {
-        findPedidoById(idPedido);
-
+    public ItemPedidoDTO findItemPedidoById(Long idItemPedido) {
         return ItemPedidoDTO.of(itemPedidoRepository.findById(idItemPedido).orElseThrow(ItemPedidoNotFoundException::new));
     }
 
