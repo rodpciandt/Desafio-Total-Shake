@@ -1,9 +1,7 @@
 package br.com.desafio.totalshake.controller;
 
-import br.com.desafio.totalshake.dto.ItemPedidoDTO;
 import br.com.desafio.totalshake.dto.PedidoDTO;
 import br.com.desafio.totalshake.enums.Status;
-import br.com.desafio.totalshake.service.ItemPedidoService;
 import br.com.desafio.totalshake.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -54,7 +52,5 @@ public class PedidoController {
         pedidoService.delete(idPedido);
         return ResponseEntity.ok("Pedido " + idPedido + " deleted");
     }
-
-
 
 }

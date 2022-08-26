@@ -29,6 +29,11 @@ public class Pedido {
     @OneToMany(mappedBy = "pedido")
     private List<ItemPedido> itensPedido;
 
+    @PrePersist
+    void prePersist() {
+        this.dataHora = LocalDateTime.now();
+    }
+
     public static Pedido of(PedidoDTO request) {
         var pedido = new Pedido();
 

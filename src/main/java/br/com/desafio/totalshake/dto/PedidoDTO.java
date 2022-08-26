@@ -23,7 +23,6 @@ public class PedidoDTO {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
-    @NotNull(message = "Data nao pode ser nula")
     private LocalDateTime dataHora;
 
     @NotNull(message = "Status nao pode ser nulo")
