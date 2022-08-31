@@ -2,17 +2,27 @@ package br.com.desafio.totalshake.controller;
 
 import br.com.desafio.totalshake.dto.PedidoDTO;
 import br.com.desafio.totalshake.enums.Status;
+import br.com.desafio.totalshake.model.Pedido;
 import br.com.desafio.totalshake.service.PedidoService;
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping("pedidos")
+@RequestMapping("/pedidos/")
 public class PedidoController {
 
     @Autowired
@@ -32,13 +42,29 @@ public class PedidoController {
     }
 
     @GetMapping("/{idPedido}")
-    public ResponseEntity<?> findById(@PathVariable Long idPedido) {
-        return ResponseEntity.ok(pedidoService.findById(idPedido));
+    public EntityModel<PedidoDTO> findById(@PathVariable Long idPedido) {
+
+        var pedido = pedidoService.findById(idPedido);
+
+        var model = EntityModel.of(pedido);
+        var linkToPedidos = linkTo(methodOn(this.getClass()).findAll());
+
+        model.add(linkToPedidos.withRel("all_pedidos"));
+        return model;
     }
 
     @GetMapping
     public ResponseEntity<?> findAll() {
-        return ResponseEntity.ok(pedidoService.findAll());
+        List<PedidoDTO> pedidos = pedidoService.findAll();
+
+        // dynamic filtering
+//        SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("status");
+//        FilterProvider filters = new SimpleFilterProvider().addFilter("PedidoFilter", filter);
+//        MappingJacksonValue mapping = new MappingJacksonValue(pedidos);
+//        mapping.setFilters(filters);
+
+
+        return ResponseEntity.ok(pedidos);
     }
 
     @PutMapping("/{idPedido}/{status}")

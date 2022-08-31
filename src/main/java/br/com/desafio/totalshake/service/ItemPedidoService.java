@@ -30,7 +30,6 @@ public class ItemPedidoService {
         return ItemPedidoDTO.of(itemPedido);
     }
 
-
     public List<ItemPedidoDTO> findAll() {
         var items = itemPedidoRepository.findAll();
 

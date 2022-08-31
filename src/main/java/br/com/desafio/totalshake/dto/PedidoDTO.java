@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
+//@JsonFilter("PedidoFilter")
 @JsonPropertyOrder({"pedido_id", "dataHora", "status", "itens"})
 public class PedidoDTO {
 

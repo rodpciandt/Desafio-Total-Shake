@@ -22,7 +22,7 @@ public class ItemPedido {
     @Column(name = "descricao", nullable = false)
     private String descricao;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pedido_id", nullable = false)
     private Pedido pedido;
 
