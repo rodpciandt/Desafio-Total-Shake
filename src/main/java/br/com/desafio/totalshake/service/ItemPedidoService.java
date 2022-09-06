@@ -7,8 +7,10 @@ import br.com.desafio.totalshake.model.ItemPedido;
 import br.com.desafio.totalshake.model.Pedido;
 import br.com.desafio.totalshake.repository.ItemPedidoRepository;
 import br.com.desafio.totalshake.repository.PedidoRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.ModelMap;
 
 import java.util.List;
 
@@ -22,9 +24,12 @@ public class ItemPedidoService {
     private ItemPedidoRepository itemPedidoRepository;
 
 
+    @Autowired
+    private ModelMapper mapper;
 
     public ItemPedidoDTO adicionarItem(ItemPedidoDTO dto) {
         Pedido pedido = findPedidoById(dto.getIdPedido());
+//        var itemPedido = itemPedidoRepository.save(ItemPedido.of(dto, pedido));
         var itemPedido = itemPedidoRepository.save(ItemPedido.of(dto, pedido));
 
         return ItemPedidoDTO.of(itemPedido);
@@ -39,10 +44,11 @@ public class ItemPedidoService {
 
     public ItemPedidoDTO atualizarItem(Long idItemPedido, ItemPedidoDTO dto) {
         var itemPedido = itemPedidoRepository.findById(idItemPedido).orElseThrow(ItemPedidoNotFoundException::new);
-        var updatedItemPedido = ItemPedido.of(dto, itemPedido.getPedido());
+//        var updatedItemPedido = ItemPedido.of(dto, itemPedido.getPedido());
 
-        updatedItemPedido.setId(itemPedido.getId());
-        return ItemPedidoDTO.of(itemPedidoRepository.save(updatedItemPedido));
+//        updatedItemPedido.setId(itemPedido.getId());
+//        return ItemPedidoDTO.of(itemPedidoRepository.save(updatedItemPedido));
+        return  null;
     }
 
     public void deleteItem(Long id) {

@@ -12,11 +12,10 @@ import javax.validation.constraints.NotNull;
 @JsonPropertyOrder({"id", "descricao", "quantidade"})
 public class ItemPedidoDTO {
 
+    private Long idItemPedido;
+
     @NotNull(message = "idPedido nao pode ser nulo")
     private Long idPedido;
-
-
-    private Long idItemPedido;
 
     @NotEmpty(message = "Descricao nao pode estar vazia")
     private String descricao;

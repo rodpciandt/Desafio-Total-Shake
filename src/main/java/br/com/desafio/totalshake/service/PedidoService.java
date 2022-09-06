@@ -5,11 +5,11 @@ import br.com.desafio.totalshake.enums.Status;
 import br.com.desafio.totalshake.exception.PedidoNotFoundException;
 import br.com.desafio.totalshake.model.Pedido;
 import br.com.desafio.totalshake.repository.PedidoRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PedidoService {
@@ -17,19 +17,25 @@ public class PedidoService {
     @Autowired
     private PedidoRepository repository;
 
+    @Autowired
+    private ModelMapper mapper;
+
+
     public PedidoDTO create(PedidoDTO request) {
-        var pedido = repository.save(Pedido.of(request));
-        return PedidoDTO.of(pedido);
+        var pedido = repository.save(mapper.map(request, Pedido.class));
+        return mapper.map(pedido, PedidoDTO.class);
     }
 
     public PedidoDTO findById(Long id) {
         var pedido = findPedido(id);
-        return PedidoDTO.of(pedido);
+        return mapper.map(pedido, PedidoDTO.class);
     }
 
     public List<PedidoDTO> findAll() {
         var pedidos = repository.findAll();
-        return pedidos.stream().map(PedidoDTO::of).collect(Collectors.toList());
+
+        System.out.println(pedidos);
+        return pedidos.stream().map(pedido -> mapper.map(pedido, PedidoDTO.class)).toList();
     }
 
     public void delete(Long id) {
@@ -40,8 +46,9 @@ public class PedidoService {
     public PedidoDTO updateStatus(Long id, Status status) {
         var pedido = findPedido(id);
         pedido.setStatus(status);
+        var updatedPedido = repository.save(pedido);
 
-        return PedidoDTO.of(repository.save(pedido));
+        return mapper.map(updatedPedido, PedidoDTO.class);
     }
 
     private Pedido findPedido(Long id) {

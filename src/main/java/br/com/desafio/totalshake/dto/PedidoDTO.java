@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-//@JsonFilter("PedidoFilter")
 @JsonPropertyOrder({"pedido_id", "dataHora", "status", "itens"})
 public class PedidoDTO {
 
@@ -30,20 +29,4 @@ public class PedidoDTO {
     private Status status;
 
     private List<ItemPedidoDTO> itens;
-
-
-    public static PedidoDTO of(Pedido pedido) {
-        var dto = new PedidoDTO();
-
-        dto.setId(pedido.getId());
-        dto.setDataHora(pedido.getDataHora());
-        dto.setStatus(pedido.getStatus());
-
-        if (pedido.getItensPedido() != null) {
-            dto.setItens(pedido.getItensPedido().stream().map(ItemPedidoDTO::of).collect(Collectors.toList()));
-        }
-
-        return dto;
-    }
-
 }
