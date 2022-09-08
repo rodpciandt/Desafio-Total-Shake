@@ -20,7 +20,7 @@ public class ItemPedidoServiceTest {
         x.setDescricao("Description");
         x.setQuantidade(3);
 
-        ItemPedidoDTO saved = service.adicionarItem(x);
+        ItemPedidoDTO saved = service.createItem(x);
 
         System.out.println(x);
         System.out.println(saved);

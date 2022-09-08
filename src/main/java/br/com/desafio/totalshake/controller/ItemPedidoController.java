@@ -1,6 +1,6 @@
 package br.com.desafio.totalshake.controller;
 
-import br.com.desafio.totalshake.dto.ItemPedidoDTO;
+import br.com.desafio.totalshake.model.dto.request.ItemPedidoRequest;
 import br.com.desafio.totalshake.service.ItemPedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +17,8 @@ public class ItemPedidoController {
     private ItemPedidoService itemPedidoService;
 
     @PostMapping("/")
-    public ResponseEntity<?> adicionarItem(@Valid @RequestBody ItemPedidoDTO itemPedidoRequest) {
-        return ResponseEntity.ok(itemPedidoService.adicionarItem(itemPedidoRequest));
+    public ResponseEntity<?> adicionarItem(@Valid @RequestBody ItemPedidoRequest itemPedidoRequest) {
+        return ResponseEntity.ok(itemPedidoService.createItem(itemPedidoRequest));
     }
 
     @GetMapping("/{idItemPedido}")
@@ -32,7 +32,7 @@ public class ItemPedidoController {
     }
 
     @PutMapping("/{idItemPedido}")
-    public ResponseEntity<?> updateItemPedido(@PathVariable Long idItemPedido, @RequestBody ItemPedidoDTO itemPedidoRequest) {
+    public ResponseEntity<?> updateItemPedido(@PathVariable Long idItemPedido, @RequestBody ItemPedidoRequest itemPedidoRequest) {
         return ResponseEntity.ok(itemPedidoService.atualizarItem(idItemPedido, itemPedidoRequest));
     }
 

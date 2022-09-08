@@ -1,9 +1,8 @@
 package br.com.desafio.totalshake.model;
 
-import br.com.desafio.totalshake.dto.ItemPedidoDTO;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.Data;
+import br.com.desafio.totalshake.model.dto.request.ItemPedidoRequest;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -11,6 +10,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "ITEM_PEDIDOS")
 @Getter @Setter
+@NoArgsConstructor
 public class ItemPedido {
 
 
@@ -29,13 +29,17 @@ public class ItemPedido {
     @JoinColumn(name = "pedido_id", nullable = false)
     private Pedido pedido;
 
-    public static ItemPedido of(ItemPedidoDTO dto, Pedido pedido) {
-        var itemPedido = new ItemPedido();
-        itemPedido.setPedido(pedido);
-        itemPedido.setDescricao(dto.getDescricao());
-        itemPedido.setQuantidade(dto.getQuantidade());
-        return itemPedido;
+    public ItemPedido(ItemPedidoRequest itemPedidoRequest, Pedido pedido) {
+        this.descricao = itemPedidoRequest.descricao();
+        this.quantidade = itemPedidoRequest.quantidade();
+        this.pedido = pedido;
     }
+
+    public ItemPedido(ItemPedidoRequest itemPedidoRequest) {
+        this.descricao = itemPedidoRequest.descricao();
+        this.quantidade = itemPedidoRequest.quantidade();
+    }
+
 
     @Override
     public String toString() {

@@ -2,17 +2,20 @@ package br.com.desafio.totalshake.model;
 
 
 import br.com.desafio.totalshake.enums.Status;
+import br.com.desafio.totalshake.model.dto.request.PedidoRequest;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "PEDIDOS")
-@Getter
-@Setter
+@Getter @Setter
+@NoArgsConstructor
 public class Pedido {
 
     @Id
@@ -29,6 +32,17 @@ public class Pedido {
 
     @OneToMany(mappedBy = "pedido", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<ItemPedido> itensPedido;
+
+    public Pedido(PedidoRequest request) {
+        this.status = request.status();
+
+        if (request.itensPedido() != null) {
+            this.itensPedido = new ArrayList<>();
+            var itens = request.itensPedido().stream().map(item -> new ItemPedido(item, this)).toList();
+
+            this.itensPedido.addAll(itens);
+        }
+    }
 
     @PrePersist
     void prePersist() {

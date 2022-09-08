@@ -1,7 +1,8 @@
 package br.com.desafio.totalshake.controller;
 
-import br.com.desafio.totalshake.dto.PedidoDTO;
 import br.com.desafio.totalshake.enums.Status;
+import br.com.desafio.totalshake.model.dto.request.PedidoRequest;
+import br.com.desafio.totalshake.model.dto.response.PedidoResponse;
 import br.com.desafio.totalshake.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
@@ -13,9 +14,6 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 @RestController
 @RequestMapping("/pedidos/")
 public class PedidoController {
@@ -25,7 +23,7 @@ public class PedidoController {
 
 
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody PedidoDTO pedido) {
+    public ResponseEntity<?> create(@Valid @RequestBody PedidoRequest pedido) {
         var pedidoResponse = this.pedidoService.create(pedido);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -46,7 +44,7 @@ public class PedidoController {
 
     @GetMapping
     public ResponseEntity<?> findAll() {
-        List<PedidoDTO> pedidos = pedidoService.findAll();
+        List<PedidoResponse> pedidos = pedidoService.findAll();
         return ResponseEntity.ok(pedidos);
     }
 
@@ -54,7 +52,6 @@ public class PedidoController {
     public ResponseEntity<?> updateStatus(@PathVariable Long idPedido, @PathVariable Status status) {
         return ResponseEntity.ok(pedidoService.updateStatus(idPedido, status));
     }
-
 
     @DeleteMapping("/{idPedido}")
     public ResponseEntity<?> delete(@PathVariable Long idPedido) {
