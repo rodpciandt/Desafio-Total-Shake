@@ -32,6 +32,8 @@ public class ItemPedidoService {
 //        var itemPedido = itemPedidoRepository.save(ItemPedido.of(dto, pedido));
         var itemPedido = itemPedidoRepository.save(ItemPedido.of(dto, pedido));
 
+
+        System.out.println("Hello, world");
         return ItemPedidoDTO.of(itemPedido);
     }
 
