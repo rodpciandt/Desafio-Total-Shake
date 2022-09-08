@@ -7,6 +7,7 @@ import br.com.desafio.totalshake.model.dto.request.PedidoRequest;
 import br.com.desafio.totalshake.model.dto.response.PedidoResponse;
 import br.com.desafio.totalshake.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,8 +40,8 @@ public class PedidoService {
 
         try {
             repository.deleteById(id);
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
+        } catch (EmptyResultDataAccessException ex) {
+            throw new PedidoNotFoundException();
         }
     }
 
@@ -52,7 +53,7 @@ public class PedidoService {
         return new PedidoResponse(updatedPedido);
     }
 
-    private Pedido findPedido(Long id) {
+    public Pedido findPedido(Long id) {
         return repository.findById(id).orElseThrow(PedidoNotFoundException::new);
     }
 }

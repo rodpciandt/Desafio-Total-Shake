@@ -1,16 +1,13 @@
 package br.com.desafio.totalshake.service;
 
 import br.com.desafio.totalshake.exception.ItemPedidoNotFoundException;
-import br.com.desafio.totalshake.exception.PedidoNotFoundException;
 import br.com.desafio.totalshake.model.ItemPedido;
-import br.com.desafio.totalshake.model.Pedido;
 import br.com.desafio.totalshake.model.dto.request.ItemPedidoRequest;
 import br.com.desafio.totalshake.model.dto.response.ItemPedidoResponse;
 import br.com.desafio.totalshake.repository.ItemPedidoRepository;
-import br.com.desafio.totalshake.repository.PedidoRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,17 +15,13 @@ import java.util.List;
 public class ItemPedidoService {
 
     @Autowired
-    private PedidoRepository pedidoRepository;
+    private PedidoService pedidoService;
 
     @Autowired
     private ItemPedidoRepository itemPedidoRepository;
 
-
-    @Autowired
-    private ModelMapper mapper;
-
     public ItemPedidoResponse createItem(ItemPedidoRequest dto) {
-        var pedido = findPedidoById(dto.idPedido());
+        var pedido = pedidoService.findPedido(dto.idPedido());
         var itemPedido = itemPedidoRepository.save( new ItemPedido(dto, pedido));
         return new ItemPedidoResponse(itemPedido);
     }
@@ -40,18 +33,20 @@ public class ItemPedidoService {
     }
 
 
+    @Transactional
     public ItemPedidoResponse atualizarItem(Long idItemPedido, ItemPedidoRequest dto) {
-        var itemPedido = itemPedidoRepository.findById(idItemPedido).orElseThrow(ItemPedidoNotFoundException::new);
-        return  null;
+        var foundItemPedido = itemPedidoRepository.findById(idItemPedido).orElseThrow(ItemPedidoNotFoundException::new);
+        var itemPedido = new ItemPedido(dto, pedidoService.findPedido(dto.idPedido()));
+        itemPedido.setId(foundItemPedido.getId());
+
+
+        return  new ItemPedidoResponse( itemPedidoRepository.save(itemPedido) );
     }
 
     public void deleteItem(Long id) {
         itemPedidoRepository.delete( itemPedidoRepository.findById(id).orElseThrow(ItemPedidoNotFoundException::new) );
     }
 
-    private Pedido findPedidoById(Long id) {
-        return pedidoRepository.findById(id).orElseThrow(PedidoNotFoundException::new);
-    }
 
     public ItemPedidoResponse findItemPedidoById(Long idItemPedido) {
         return new ItemPedidoResponse(itemPedidoRepository.findById(idItemPedido).orElseThrow(ItemPedidoNotFoundException::new));
